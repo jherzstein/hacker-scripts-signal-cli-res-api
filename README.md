@@ -4,7 +4,7 @@ English | [简体中文](./README.zh-CN.md)
 # Hacker Scripts
 
 Based on a _[true
-story](https://www.jitbit.com/alexblog/249-now-thats-what-i-call-a-hacker/)_:
+story](https://www.jitbit.com/alexblog/249-now-thats-what-i-call-a-hacker/)_, a fork for _[signal-cli-rest-api](https://github.com/bbernhard/signal-cli-rest-api)_ instead of twilio:
 
 > xxx: OK, so, our build engineer has left for another company. The dude was literally living inside the terminal. You know, that type of a guy who loves Vim, creates diagrams in Dot and writes wiki-posts in Markdown... If something - anything - requires more than 90 seconds of his time, he writes a script to automate that.
 

@@ -6,8 +6,8 @@ if who | grep -wq $USER; then
 fi
 
 # Phone numbers
-MY_NUMBER='+xxx'
-NUMBER_OF_BOSS='+xxx'
+MY_NUMBER='"+xxx"'
+NUMBER_OF_BOSS='"+xxx"'
 
 EXCUSES=(
   'Locked out'
@@ -18,12 +18,10 @@ EXCUSES=(
 rand=$[ $RANDOM % ${#EXCUSES[@]} ]
 
 RANDOM_EXCUSE=${EXCUSES[$rand]}
-MESSAGE="Gonna work from home. "$RANDOM_EXCUSE
+MESSAGE='"Gonna work from home. '"$RANDOM_EXCUSE"'"'
 
 # Send a text message
-RESPONSE=`curl -fSs -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN" \
-  -d "From=$MY_NUMBER" -d "To=$NUMBER_OF_BOSS" -d "Body=$MESSAGE" \
-  "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages"`
+RESPONSE=`curl -X POST -H "Content-Type: application/json" 'localhost:8080/v2/send' -d '{"message": '"$MESSAGE"', "number": '"$MY_NUMBER"', "recipients": [ '"$NUMBER_OF_BOSS"' ] }'`
 
 # Log errors
 if [ $? -gt 0 ]; then

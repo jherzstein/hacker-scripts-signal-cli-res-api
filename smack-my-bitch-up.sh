@@ -6,8 +6,10 @@ if ! who | grep -wq $USER; then
 fi
 
 # Phone numbers
-MY_NUMBER='+xxx'
-HER_NUMBER='+xxx'
+MY_NUMBER='"+xxx"'
+HER_NUMBER='"+xxx"'
+echo $MY_NUMBER 
+echo $HER_NUMBER
 
 REASONS=(
   'Working hard'
@@ -17,12 +19,11 @@ REASONS=(
 rand=$[ $RANDOM % ${#REASONS[@]} ]
 
 RANDOM_REASON=${REASONS[$rand]}
-MESSAGE="Late at work. "$RANDOM_REASON
+MESSAGE='"Late at work. '"$RANDOM_REASON"'"'
+echo $MESSAGE
 
 # Send a text message
-RESPONSE=`curl -fSs -u "$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN" \
-  -d "From=$MY_NUMBER" -d "To=$HER_NUMBER" -d "Body=$MESSAGE" \
-  "https://api.twilio.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages"`
+RESPONSE=`curl -X POST -H "Content-Type: application/json" 'localhost:8080/v2/send' -d '{"message": '"$MESSAGE"', "number": '"$MY_NUMBER"', "recipients": [ '"$HER_NUMBER"' ] }'`
 
 # Log errors
 if [ $? -gt 0 ]; then

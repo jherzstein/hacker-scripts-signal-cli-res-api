@@ -30,17 +30,10 @@ Pull requests with other implementations (Python, Perl, Shell, etc) are welcome.
 You need these environment variables:
 
 ```sh
-# used in `smack-my-bitch-up` and `hangover` scripts
-TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-TWILIO_AUTH_TOKEN=yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
-
 # used in `kumar_asshole` script
 GMAIL_USERNAME=admin@example.org
 GMAIL_PASSWORD=password
 ```
-
-For Ruby scripts you need to install gems:
-`gem install dotenv twilio-ruby gmail`
 
 ## Cron jobs
 

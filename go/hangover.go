@@ -2,28 +2,23 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math/rand"
 	"os"
-
-	"github.com/codeskyblue/go-sh"
-	"github.com/subosito/twilio"
+	"os/exec"
+	"strings"
 )
 
 const my_number string = "+xxxxx"
 const boss_number string = "+yyyyy"
 
 func main() {
-	//exit if sessions with my username are found
-	_, err := sh.Command("who").Command("grep", "my_username").Output()
-	if err != nil {
-		os.Exit(1)
+	output1, err := exec.Command("who").Output()
+	output2 := os.Getenv("USER")
+	users := string(output1[:])
+	current_user := string(output2[:])
+	if strings.Contains(users, current_user) {
+		return
 	}
-
-	//Grab Twilio ID and token from environment variables
-	Account_Sid := os.Getenv("TWILIO_ACCOUNT_SID")
-	Auth_Token := os.Getenv("TWILIO_AUTH_TOKEN")
-
 	//create the reasons slice and append reasons to it
 	reasons := make([]string, 0)
 	reasons = append(reasons,
@@ -32,16 +27,15 @@ func main() {
 		"Food poisoning",
 		"Not feeling well")
 
-	// Initialize Twilio client and send message
-	client := twilio.NewClient(Account_Sid, Auth_Token, nil)
+	// Create and send message using your signal service with api
 	message := fmt.Sprint("Gonna work from home...", reasons[rand.Intn(len(reasons))])
 
-	params := twilio.MessageParams{
-		Body: message,
-	}
-	s, resp, err := client.Messages.Send(my_number, boss_number, params)
+	response, err := exec.Command("curl", "-X", "POST", "-H", "Content-Type: application/json", "localhost:8080/v2/send", "-d", fmt.Sprintf(`{"message": "%s", "number": "%s", "recipients": ["%s"]}`, message, my_number, boss_number)).Output()
 
-	if err == nil {
-		log.Fatal(s, resp, err)
+	fmt.Printf("Command output:\n%s\n", response)
+
+	if err != nil {
+		fmt.Printf("Failed to send SMS: %s", err)
+		return
 	}
 }
